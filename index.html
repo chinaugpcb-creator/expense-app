@@ -1,368 +1,318 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="description" content="企业开支管理系统 - 跟踪和管理您的企业支出">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="企业开支">
+  <title>企业开支管理系统</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   </style>
 </head>
 <body>
-<p class="p1">import React, { useState, useEffect } from 'react';</p>
-<p class="p1">import { PlusCircle, TrendingDown, DollarSign, Calendar, Trash2, Download } from 'lucide-react';</p>
-<p class="p1">import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';</p>
-<p class="p2"><br></p>
-<p class="p1">const ExpenseTracker = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [expenses, setExpenses] = useState(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const saved = localStorage.getItem('expenses');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return saved ? JSON.parse(saved) : [];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>} catch {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return [];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p2"><span class="Apple-converted-space">  </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [formData, setFormData] = useState({</p>
-<p class="p1"><span class="Apple-converted-space">    </span>description: '',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>amount: '',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>category: '办公用品',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>date: new Date().toISOString().split('T')[0]</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p2"><span class="Apple-converted-space">  </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [filter, setFilter] = useState('all');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [showInstallBanner, setShowInstallBanner] = useState(false);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>useEffect(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>localStorage.setItem('expenses', JSON.stringify(expenses));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>} catch (e) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>console.error('保存失败:', e);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}, [expenses]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const categories = [</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'办公用品', '差旅费', '工资', '租金', '市场营销',<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>'设备采购', '培训', '招待费', '其他'</p>
-<p class="p1"><span class="Apple-converted-space">  </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const categoryColors = {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'办公用品': '#3b82f6',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'差旅费': '#8b5cf6',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'工资': '#ec4899',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'租金': '#f59e0b',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'市场营销': '#10b981',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'设备采购': '#6366f1',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'培训': '#14b8a6',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'招待费': '#f97316',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'其他': '#64748b'</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const handleSubmit = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (formData.description &amp;&amp; formData.amount) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newExpense = {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>id: Date.now(),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>...formData,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>amount: parseFloat(formData.amount)</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p1"><span class="Apple-converted-space">      </span>setExpenses([newExpense, ...expenses]);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>setFormData({</p>
-<p class="p1"><span class="Apple-converted-space">        </span>description: '',</p>
-<p class="p1"><span class="Apple-converted-space">        </span>amount: '',</p>
-<p class="p1"><span class="Apple-converted-space">        </span>category: '办公用品',</p>
-<p class="p1"><span class="Apple-converted-space">        </span>date: new Date().toISOString().split('T')[0]</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const deleteExpense = (id) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setExpenses(expenses.filter(exp =&gt; exp.id !== id));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const filteredExpenses = filter === 'all'<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>? expenses<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>: expenses.filter(exp =&gt; exp.category === filter);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const totalExpense = filteredExpenses.reduce((sum, exp) =&gt; sum + exp.amount, 0);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const categoryStats = categories.map(cat =&gt; ({</p>
-<p class="p1"><span class="Apple-converted-space">    </span>name: cat,</p>
-<p class="p1"><span class="Apple-converted-space">    </span>value: expenses.filter(exp =&gt; exp.category === cat).reduce((sum, exp) =&gt; sum + exp.amount, 0)</p>
-<p class="p1"><span class="Apple-converted-space">  </span>})).filter(stat =&gt; stat.value &gt; 0);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const monthlyStats = expenses.reduce((acc, exp) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const month = exp.date.substring(0, 7);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!acc[month]) acc[month] = 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>acc[month] += exp.amount;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return acc;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}, {});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const monthlyData = Object.entries(monthlyStats)</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.map(([month, amount]) =&gt; ({ month, amount }))</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.sort((a, b) =&gt; a.month.localeCompare(b.month))</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.slice(-6);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const exportToCSV = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const headers = ['日期', '描述', '类别', '金额'];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const rows = filteredExpenses.map(exp =&gt; [</p>
-<p class="p1"><span class="Apple-converted-space">      </span>exp.date, exp.description, exp.category, exp.amount</p>
-<p class="p1"><span class="Apple-converted-space">    </span>]);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const csv = [headers, ...rows].map(row =&gt; row.join(',')).join('\n');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const link = document.createElement('a');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>link.href = URL.createObjectURL(blob);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>link.download = `企业开支_${new Date().toISOString().split('T')[0]}.csv`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>link.click();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="max-w-7xl mx-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;h1 className="text-4xl font-bold text-slate-800 mb-2"&gt;企业开支管理系统&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;p className="text-slate-600"&gt;跟踪和管理您的企业支出 📱 可安装为手机APP&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex items-center justify-between"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-slate-600 text-sm mb-1"&gt;总开支&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-3xl font-bold text-slate-800"&gt;¥{totalExpense.toLocaleString('zh-CN', {minimumFractionDigits: 2})}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="bg-blue-100 p-3 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;DollarSign className="text-blue-600" size={32} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex items-center justify-between"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-slate-600 text-sm mb-1"&gt;开支笔数&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-3xl font-bold text-slate-800"&gt;{filteredExpenses.length}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="bg-purple-100 p-3 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;TrendingDown className="text-purple-600" size={32} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex items-center justify-between"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-slate-600 text-sm mb-1"&gt;平均开支&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-3xl font-bold text-slate-800"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>¥{filteredExpenses.length &gt; 0 ? (totalExpense / filteredExpenses.length).toLocaleString('zh-CN', {minimumFractionDigits: 2}) : '0.00'}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="bg-green-100 p-3 rounded-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;Calendar className="text-green-600" size={32} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-xl shadow-lg p-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 className="text-xl font-bold text-slate-800 mb-4"&gt;添加开支&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;label className="block text-sm font-medium text-slate-700 mb-2"&gt;描述&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;input</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>type="text"</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>value={formData.description}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>onChange={(e) =&gt; setFormData({...formData, description: e.target.value})}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>placeholder="例如：购买办公桌椅"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="grid grid-cols-2 gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;label className="block text-sm font-medium text-slate-700 mb-2"&gt;金额（¥）&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;input</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>type="number"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>step="0.01"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>value={formData.amount}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onChange={(e) =&gt; setFormData({...formData, amount: e.target.value})}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>placeholder="0.00"</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;label className="block text-sm font-medium text-slate-700 mb-2"&gt;日期&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;input</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>type="date"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>value={formData.date}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onChange={(e) =&gt; setFormData({...formData, date: e.target.value})}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;label className="block text-sm font-medium text-slate-700 mb-2"&gt;类别&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;select</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>value={formData.category}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>onChange={(e) =&gt; setFormData({...formData, category: e.target.value})}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>{categories.map(cat =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option key={cat} value={cat}&gt;{cat}&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                </span>onClick={handleSubmit}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;PlusCircle size={20} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>添加开支</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-xl shadow-lg p-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 className="text-xl font-bold text-slate-800 mb-4"&gt;分类统计&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{categoryStats.length &gt; 0 ? (</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;ResponsiveContainer width="100%" height={300}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;PieChart&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;Pie</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>data={categoryStats}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>cx="50%"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>cy="50%"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>labelLine={false}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>label={({name, percent}) =&gt; `${name} ${(percent * 100).toFixed(0)}%`}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>outerRadius={80}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>fill="#8884d8"</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dataKey="value"</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{categoryStats.map((entry, index) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;Cell key={`cell-${index}`} fill={categoryColors[entry.name]} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/Pie&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;Tooltip formatter={(value) =&gt; `¥${value.toLocaleString('zh-CN', {minimumFractionDigits: 2})}`} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/PieChart&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/ResponsiveContainer&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="h-72 flex items-center justify-center text-slate-400"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>暂无数据</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>{monthlyData.length &gt; 0 &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-xl shadow-lg p-6 mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 className="text-xl font-bold text-slate-800 mb-4"&gt;月度趋势&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;ResponsiveContainer width="100%" height={300}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;BarChart data={monthlyData}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;CartesianGrid strokeDasharray="3 3" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;XAxis dataKey="month" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;YAxis /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;Tooltip formatter={(value) =&gt; `¥${value.toLocaleString('zh-CN', {minimumFractionDigits: 2})}`} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;Legend /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;Bar dataKey="amount" fill="#3b82f6" name="开支金额" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/BarChart&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/ResponsiveContainer&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="bg-white rounded-xl shadow-lg p-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 className="text-xl font-bold text-slate-800"&gt;开支记录&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex gap-2 w-full sm:w-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;select</p>
-<p class="p1"><span class="Apple-converted-space">                </span>value={filter}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>onChange={(e) =&gt; setFilter(e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>className="flex-1 sm:flex-none px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;option value="all"&gt;全部类别&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{categories.map(cat =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;option key={cat} value={cat}&gt;{cat}&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>{filteredExpenses.length &gt; 0 &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>onClick={exportToCSV}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center gap-2 transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;Download size={18} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>导出</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="overflow-x-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;table className="w-full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr className="border-b border-slate-200"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;th className="text-left py-3 px-4 text-slate-600 font-semibold"&gt;日期&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;th className="text-left py-3 px-4 text-slate-600 font-semibold"&gt;描述&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;th className="text-left py-3 px-4 text-slate-600 font-semibold"&gt;类别&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;th className="text-right py-3 px-4 text-slate-600 font-semibold"&gt;金额&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;th className="text-center py-3 px-4 text-slate-600 font-semibold"&gt;操作&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{filteredExpenses.length &gt; 0 ? (</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>filteredExpenses.map(expense =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;tr key={expense.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;td className="py-3 px-4 text-slate-700"&gt;{expense.date}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;td className="py-3 px-4 text-slate-700"&gt;{expense.description}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;td className="py-3 px-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>className="px-3 py-1 rounded-full text-sm font-medium text-white"</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>style={{backgroundColor: categoryColors[expense.category]}}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>{expense.category}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;td className="py-3 px-4 text-right font-semibold text-slate-800"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>¥{expense.amount.toLocaleString('zh-CN', {minimumFractionDigits: 2})}</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;td className="py-3 px-4 text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>onClick={() =&gt; deleteExpense(expense.id)}</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>className="text-red-600 hover:text-red-800 transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;Trash2 size={18} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>))</p>
-<p class="p1"><span class="Apple-converted-space">                </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td colSpan="5" className="py-8 text-center text-slate-400"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>暂无开支记录</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl shadow-lg p-6 border border-blue-200"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3 className="text-lg font-bold text-slate-800 mb-3"&gt;📱 安装为手机 APP&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="space-y-2 text-sm text-slate-700"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;&lt;strong&gt;Android/Chrome:&lt;/strong&gt; 点击浏览器菜单 ⋮ → "添加到主屏幕"&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;&lt;strong&gt;iPhone/Safari:&lt;/strong&gt; 点击分享按钮 📤 → "添加到主屏幕"&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p className="text-xs text-slate-500 mt-2"&gt;💡 提示：需要先将此页面部署到网上（如 Netlify、Vercel）才能安装&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>);</p>
-<p class="p1">};</p>
-<p class="p2"><br></p>
-<p class="p1">export default ExpenseTracker;</p>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = window.Recharts;
+
+    const PlusCircle = ({ size = 24 }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+      </svg>
+    );
+
+    const TrendingDown = ({ size = 24 }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>
+      </svg>
+    );
+
+    const DollarSign = ({ size = 24 }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+    );
+
+    const Calendar = ({ size = 24 }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+    );
+
+    const Trash2 = ({ size = 24 }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+      </svg>
+    );
+
+    const Download = ({ size = 24 }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+    );
+
+    const ExpenseTracker = () => {
+      const [expenses, setExpenses] = useState(() => {
+        try {
+          const saved = localStorage.getItem('expenses');
+          return saved ? JSON.parse(saved) : [];
+        } catch {
+          return [];
+        }
+      });
+      
+      const [formData, setFormData] = useState({
+        description: '',
+        amount: '',
+        category: '办公用品',
+        date: new Date().toISOString().split('T')[0]
+      });
+      
+      const [filter, setFilter] = useState('all');
+
+      useEffect(() => {
+        try {
+          localStorage.setItem('expenses', JSON.stringify(expenses));
+        } catch (e) {
+          console.error('保存失败:', e);
+        }
+      }, [expenses]);
+
+      const categories = ['办公用品', '差旅费', '工资', '租金', '市场营销', '设备采购', '培训', '招待费', '其他'];
+
+      const categoryColors = {
+        '办公用品': '#3b82f6', '差旅费': '#8b5cf6', '工资': '#ec4899', '租金': '#f59e0b',
+        '市场营销': '#10b981', '设备采购': '#6366f1', '培训': '#14b8a6', '招待费': '#f97316', '其他': '#64748b'
+      };
+
+      const handleSubmit = () => {
+        if (formData.description && formData.amount) {
+          const newExpense = { id: Date.now(), ...formData, amount: parseFloat(formData.amount) };
+          setExpenses([newExpense, ...expenses]);
+          setFormData({ description: '', amount: '', category: '办公用品', date: new Date().toISOString().split('T')[0] });
+        }
+      };
+
+      const deleteExpense = (id) => setExpenses(expenses.filter(exp => exp.id !== id));
+      const filteredExpenses = filter === 'all' ? expenses : expenses.filter(exp => exp.category === filter);
+      const totalExpense = filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+
+      const categoryStats = categories.map(cat => ({
+        name: cat,
+        value: expenses.filter(exp => exp.category === cat).reduce((sum, exp) => sum + exp.amount, 0)
+      })).filter(stat => stat.value > 0);
+
+      const monthlyStats = expenses.reduce((acc, exp) => {
+        const month = exp.date.substring(0, 7);
+        if (!acc[month]) acc[month] = 0;
+        acc[month] += exp.amount;
+        return acc;
+      }, {});
+
+      const monthlyData = Object.entries(monthlyStats)
+        .map(([month, amount]) => ({ month, amount }))
+        .sort((a, b) => a.month.localeCompare(b.month))
+        .slice(-6);
+
+      const exportToCSV = () => {
+        const headers = ['日期', '描述', '类别', '金额'];
+        const rows = filteredExpenses.map(exp => [exp.date, exp.description, exp.category, exp.amount]);
+        const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `企业开支_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+      };
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold text-slate-800 mb-2">企业开支管理系统</h1>
+              <p className="text-slate-600">跟踪和管理您的企业支出 📱</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm mb-1">总开支</p>
+                    <p className="text-3xl font-bold text-slate-800">¥{totalExpense.toLocaleString('zh-CN', {minimumFractionDigits: 2})}</p>
+                  </div>
+                  <div className="bg-blue-100 p-3 rounded-lg"><DollarSign size={32} /></div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm mb-1">开支笔数</p>
+                    <p className="text-3xl font-bold text-slate-800">{filteredExpenses.length}</p>
+                  </div>
+                  <div className="bg-purple-100 p-3 rounded-lg"><TrendingDown size={32} /></div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm mb-1">平均开支</p>
+                    <p className="text-3xl font-bold text-slate-800">
+                      ¥{filteredExpenses.length > 0 ? (totalExpense / filteredExpenses.length).toLocaleString('zh-CN', {minimumFractionDigits: 2}) : '0.00'}
+                    </p>
+                  </div>
+                  <div className="bg-green-100 p-3 rounded-lg"><Calendar size={32} /></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-xl font-bold text-slate-800 mb-4">添加开支</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">描述</label>
+                    <input type="text" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="例如：购买办公桌椅" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">金额（¥）</label>
+                      <input type="number" step="0.01" value={formData.amount} onChange={(e) => setFormData({...formData, amount: e.target.value})}
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0.00" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">日期</label>
+                      <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})}
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">类别</label>
+                    <select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})}
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                      {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                    </select>
+                  </div>
+                  <button onClick={handleSubmit}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                    <PlusCircle size={20} /> 添加开支
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-xl font-bold text-slate-800 mb-4">分类统计</h2>
+                {categoryStats.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie data={categoryStats} cx="50%" cy="50%" labelLine={false}
+                        label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={80} dataKey="value">
+                        {categoryStats.map((entry, i) => <Cell key={`cell-${i}`} fill={categoryColors[entry.name]} />)}
+                      </Pie>
+                      <Tooltip formatter={(value) => `¥${value.toLocaleString('zh-CN', {minimumFractionDigits: 2})}`} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-72 flex items-center justify-center text-slate-400">暂无数据</div>
+                )}
+              </div>
+            </div>
+
+            {monthlyData.length > 0 && (
+              <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h2 className="text-xl font-bold text-slate-800 mb-4">月度趋势</h2>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={monthlyData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip formatter={(value) => `¥${value.toLocaleString('zh-CN', {minimumFractionDigits: 2})}`} />
+                    <Legend />
+                    <Bar dataKey="amount" fill="#3b82f6" name="开支金额" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                <h2 className="text-xl font-bold text-slate-800">开支记录</h2>
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <select value={filter} onChange={(e) => setFilter(e.target.value)}
+                    className="flex-1 sm:flex-none px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="all">全部类别</option>
+                    {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                  </select>
+                  {filteredExpenses.length > 0 && (
+                    <button onClick={exportToCSV}
+                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center gap-2 transition-colors">
+                      <Download size={18} /> 导出
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-slate-200">
+                      <th className="text-left py-3 px-4 text-slate-600 font-semibold">日期</th>
+                      <th className="text-left py-3 px-4 text-slate-600 font-semibold">描述</th>
+                      <th className="text-left py-3 px-4 text-slate-600 font-semibold">类别</th>
+                      <th className="text-right py-3 px-4 text-slate-600 font-semibold">金额</th>
+                      <th className="text-center py-3 px-4 text-slate-600 font-semibold">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredExpenses.length > 0 ? (
+                      filteredExpenses.map(expense => (
+                        <tr key={expense.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                          <td className="py-3 px-4 text-slate-700">{expense.date}</td>
+                          <td className="py-3 px-4 text-slate-700">{expense.description}</td>
+                          <td className="py-3 px-4">
+                            <span className="px-3 py-1 rounded-full text-sm font-medium text-white"
+                              style={{backgroundColor: categoryColors[expense.category]}}>
+                              {expense.category}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-right font-semibold text-slate-800">
+                            ¥{expense.amount.toLocaleString('zh-CN', {minimumFractionDigits: 2})}
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <button onClick={() => deleteExpense(expense.id)}
+                              className="text-red-600 hover:text-red-800 transition-colors">
+                              <Trash2 size={18} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr><td colSpan="5" className="py-8 text-center text-slate-400">暂无开支记录</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<ExpenseTracker />, document.getElementById('root'));
+  </script>
 </body>
 </html>
